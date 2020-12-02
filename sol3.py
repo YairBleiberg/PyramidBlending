@@ -46,7 +46,17 @@ def build_gaussian_pyramid(im, max_levels, filter_size):
 
 
 def build_laplacian_pyramid(im, max_levels, filter_size):
-    pyr, filter = build_gaussian_pyramid(im, max_levels, filter_size)
+    pyr, filter_vec = build_gaussian_pyramid(im, max_levels, filter_size)
     for i in range(len(pyr)-1):
         pyr[i] = pyr[i] - expand(pyr[i+1], filter_size)
-    return [pyr, filter]
+    return [pyr, filter_vec]
+
+
+def laplacian_to_image(lpyr, filter_vec, coeff):
+    # we reverse the pyramid to start the sum from the bottom
+    lpyr.reverse()
+    coeff.reverse()
+    img = coeff[0]*lpyr[0]
+    for i in np.arange(1, len(lpyr)):
+        img = expand(img, filter_vec.size) + coeff[i]*lpyr[i]
+    return img
