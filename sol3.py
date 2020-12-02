@@ -8,6 +8,7 @@ def build_filter(filter_size):
     filter /= np.sum(filter)
     return filter
 
+
 def reduce(im, filter_size):
     # first blur and take every 2nd pixel along x axis
     kernel = np.expand_dims(build_filter(filter_size), axis=0)
@@ -32,3 +33,20 @@ def expand(im, filter_size):
     im = np.append(im, np.zeros((1, 2*M)), axis=0)
     im = ndimage.filters.convolve(im, 2*kernel.transpose(), mode='mirror')
     return im
+
+
+def build_gaussian_pyramid(im, max_levels, filter_size):
+    pyr = [im]
+    for i in np.arange(max_levels-1):
+        if np.min(im.shape) < 32:
+            break
+        im = reduce(im, filter_size)
+        pyr.append(im)
+    return [pyr, build_filter(filter_size)]
+
+
+def build_laplacian_pyramid(im, max_levels, filter_size):
+    pyr, filter = build_gaussian_pyramid(im, max_levels, filter_size)
+    for i in range(len(pyr)-1):
+        pyr[i] = pyr[i] - expand(pyr[i+1], filter_size)
+    return [pyr, filter]
