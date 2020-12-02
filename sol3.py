@@ -9,9 +9,13 @@ def build_filter(filter_size):
     return filter
 
 def reduce(im, filter_size):
-    filter = build_filter(filter_size)
-
-
-
+    # first blur and take every 2nd pixel along x axis
+    filter = np.expand_dims(build_filter(filter_size), axis=0)
+    im = ndimage.filters.convolve(im, filter, mode='reflect')
+    im = im[:, ::2]
+    # then do it along y axis
+    im = ndimage.filters.convolve(im, filter.transpose, mode='reflect')
+    im = im[::2, :]
+    return im
 
 print(build_filter(5))
