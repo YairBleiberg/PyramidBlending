@@ -3,6 +3,8 @@ from scipy import ndimage
 import matplotlib.pyplot as plt
 # builds gaussian filter
 def build_filter(filter_size):
+    if filter_size == 1:
+        return np.ones(1)
     filter = np.ones(2)
     for i in np.arange(filter_size-2):
         filter = np.convolve(filter, np.ones(2))
@@ -76,3 +78,5 @@ def display_pyramid(pyr, levels):
     res = render_pyramid(pyr, levels)
     plt.imshow(res)
     plt.show()
+def pyramid_blending(im1, im2, mask, max_levels, filter_size_im, filter_size_mask):
+        
