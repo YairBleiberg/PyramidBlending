@@ -1,5 +1,6 @@
 import numpy as np
 from scipy import ndimage
+import matplotlib.pyplot as plt
 # builds gaussian filter
 def build_filter(filter_size):
     filter = np.ones(2)
@@ -70,3 +71,8 @@ def render_pyramid(pyr, levels):
         add_level = np.pad(normalized_level, ((0, N-pyr[i].shape[0]), (0, 0)))
         res = np.append(res, add_level, axis=1)
     return res
+
+def display_pyramid(pyr, levels):
+    res = render_pyramid(pyr, levels)
+    plt.imshow(res)
+    plt.show()
