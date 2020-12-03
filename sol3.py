@@ -79,5 +79,14 @@ def display_pyramid(pyr, levels):
     res = render_pyramid(pyr, levels)
     plt.imshow(res)
     plt.show()
+
 def pyramid_blending(im1, im2, mask, max_levels, filter_size_im, filter_size_mask):
-        
+        L1 = build_laplacian_pyramid(im1, max_levels, filter_size_im)
+        L2 = build_laplacian_pyramid(im2, max_levels, filter_size_im)
+        Gm = build_gaussian_pyramid(np.float64(mask), max_levels, filter_size_mask)
+        Lout = []
+        for i in range(len(L1)):
+            Lout = np.append(Lout, L1[i]*Gm[i] + L2[i]*(1-Gm[i]))
+        im_blend = laplacian_to_image(Lout, build_filter(filter_size_im), np.ones(len(Lout)).tolist())
+        return np.clip(im_blend, 0, 1)
+
