@@ -74,6 +74,7 @@ def render_pyramid(pyr, levels):
         res = np.append(res, add_level, axis=1)
     return res
 
+
 def display_pyramid(pyr, levels):
     res = render_pyramid(pyr, levels)
     plt.imshow(res)
