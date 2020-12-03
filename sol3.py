@@ -60,3 +60,13 @@ def laplacian_to_image(lpyr, filter_vec, coeff):
     for i in np.arange(1, len(lpyr)):
         img = expand(img, filter_vec.size) + coeff[i]*lpyr[i]
     return img
+
+
+def render_pyramid(pyr, levels):
+    res = (pyr[0]-np.amin(pyr[0]))/(np.amax(pyr[0])-np.amin(pyr[0]))
+    N, M = pyr[0].shape
+    for i in np.arange(1, levels):
+        normalized_level = (pyr[i]-np.amin(pyr[i]))/(np.amax(pyr[i])-np.amin(pyr[i]))
+        add_level = np.pad(normalized_level, ((0, N-pyr[i].shape[0]), (0, 0)))
+        res = np.append(res, add_level, axis=1)
+    return res
