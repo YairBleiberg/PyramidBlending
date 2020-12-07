@@ -130,4 +130,22 @@ def genie_vaping_blending():
     return genie, vaping_cloud, mask, blended
 
 
+def johnny_hair_blending():
+    johnny = read_image(relpath("externals/heresjohnny.jpg"), 2)
+    hair = read_image(relpath("externals/hair.jpg"), 2)
+    mask = np.rint(read_image(relpath("externals/hair_mask.jpg"), 1)).astype(bool)
+    blended = np.zeros(hair.shape)
+    for i in np.arange(3):
+        blended[:,:,i] = pyramid_blending(hair[:,:, i], johnny[:,:,i], mask, 10, 3, 3)
+    plt.subplot(2,2,1)
+    plt.imshow(hair)
+    plt.subplot(2,2,2)
+    plt.imshow(johnny)
+    plt.subplot(2, 2, 3)
+    plt.imshow(mask, cmap='gray')
+    plt.subplot(2, 2, 4)
+    plt.imshow(blended)
+    plt.show()
+    return hair, johnny, mask, blended
+
 genie, vaping_cloud, mask, blended = genie_vaping_blending()
