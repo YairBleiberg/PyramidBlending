@@ -90,3 +90,28 @@ def pyramid_blending(im1, im2, mask, max_levels, filter_size_im, filter_size_mas
         im_blend = laplacian_to_image(Lout, build_filter(filter_size_im), np.ones(len(Lout)).tolist())
         return np.clip(im_blend, 0, 1)
 
+
+from imageio import imread, imwrite
+from skimage.color import rgb2gray
+Z = 256
+
+
+def read_image(filename, representation):
+    im = imread(filename)
+    if representation == 2:
+        return (im.astype(np.float64))/(Z-1)
+    else:
+        if len(im.shape) >= 3:
+            return (rgb2gray(im).astype(np.float64)) / (Z - 1)
+        else:
+            return (im.astype(np.float64))/(Z-1)
+
+genie = read_image(r"C:\Users\Yair Bleiberg\PycharmProjects\ex3-yairbleiberg\genie.jpg", 2)
+vaping_cloud = read_image(r"C:\Users\Yair Bleiberg\PycharmProjects\ex3-yairbleiberg\vaping_cloud.jpg", 2)
+mask = np.round(read_image(r"C:\Users\Yair Bleiberg\PycharmProjects\ex3-yairbleiberg\mask.jpg", 2))
+blended = np.zeros(genie.shape)
+for i in np.arange(3):
+    blended[:,:,i] = pyramid_blending(genie[:,:,i], vaping_cloud[:,:,i], mask[:,:,i], 10, 3, 3)
+plt.imshow(blended)
+plt.show()
+u=1
