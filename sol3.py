@@ -114,7 +114,7 @@ def relpath(filename):
 def genie_vaping_blending():
     genie = read_image(relpath("externals/genie.jpg"), 2)
     vaping_cloud = read_image(relpath("externals/cloud.jpg"), 2)
-    mask = np.rint(read_image(relpath("externals/genie_mask.jpg"), 1))
+    mask = np.rint(read_image(relpath("externals/genie_mask.jpg"), 1)).astype(bool)
     blended = np.zeros(genie.shape)
     for i in np.arange(3):
         blended[:,:,i] = pyramid_blending(genie[:,:, i], vaping_cloud[:,:,i], mask, 10, 3, 3)
@@ -130,4 +130,4 @@ def genie_vaping_blending():
     return genie, vaping_cloud, mask, blended
 
 
-genie_vaping_blending()
+genie, vaping_cloud, mask, blended = genie_vaping_blending()
