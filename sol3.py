@@ -81,12 +81,12 @@ def display_pyramid(pyr, levels):
     plt.show()
 
 def pyramid_blending(im1, im2, mask, max_levels, filter_size_im, filter_size_mask):
-        L1 = build_laplacian_pyramid(im1, max_levels, filter_size_im)
-        L2 = build_laplacian_pyramid(im2, max_levels, filter_size_im)
-        Gm = build_gaussian_pyramid(np.float64(mask), max_levels, filter_size_mask)
+        L1, filter_vec = build_laplacian_pyramid(im1, max_levels, filter_size_im)
+        L2, filter_vec = build_laplacian_pyramid(im2, max_levels, filter_size_im)
+        Gm, filter_vec = build_gaussian_pyramid(np.float64(mask), max_levels, filter_size_mask)
         Lout = []
         for i in range(len(L1)):
-            Lout = np.append(Lout, L1[i]*Gm[i] + L2[i]*(1-Gm[i]))
+            Lout.append(L1[i]*Gm[i] + L2[i]*(1-Gm[i]))
         im_blend = laplacian_to_image(Lout, build_filter(filter_size_im), np.ones(len(Lout)).tolist())
         return np.clip(im_blend, 0, 1)
 
@@ -102,16 +102,32 @@ def read_image(filename, representation):
         return (im.astype(np.float64))/(Z-1)
     else:
         if len(im.shape) >= 3:
-            return (rgb2gray(im).astype(np.float64)) / (Z - 1)
+            return (rgb2gray(im).astype(np.float64))
         else:
             return (im.astype(np.float64))/(Z-1)
 
-genie = read_image(r"C:\Users\Yair Bleiberg\PycharmProjects\ex3-yairbleiberg\genie.jpg", 2)
-vaping_cloud = read_image(r"C:\Users\Yair Bleiberg\PycharmProjects\ex3-yairbleiberg\vaping_cloud.jpg", 2)
-mask = np.round(read_image(r"C:\Users\Yair Bleiberg\PycharmProjects\ex3-yairbleiberg\mask.jpg", 2))
-blended = np.zeros(genie.shape)
-for i in np.arange(3):
-    blended[:,:,i] = pyramid_blending(genie[:,:,i], vaping_cloud[:,:,i], mask[:,:,i], 10, 3, 3)
-plt.imshow(blended)
-plt.show()
-u=1
+
+import os
+def relpath(filename):
+    return os.path.join(os.path.dirname(__file__), filename)
+
+def genie_vaping_blending():
+    genie = read_image(relpath("externals/genie.jpg"), 2)
+    vaping_cloud = read_image(relpath("externals/cloud.jpg"), 2)
+    mask = np.rint(read_image(relpath("externals/genie_mask.jpg"), 1))
+    blended = np.zeros(genie.shape)
+    for i in np.arange(3):
+        blended[:,:,i] = pyramid_blending(genie[:,:, i], vaping_cloud[:,:,i], mask, 10, 3, 3)
+    plt.subplot(2,2,1)
+    plt.imshow(genie)
+    plt.subplot(2,2,2)
+    plt.imshow(vaping_cloud)
+    plt.subplot(2, 2, 3)
+    plt.imshow(mask, cmap='gray')
+    plt.subplot(2, 2, 4)
+    plt.imshow(blended)
+    plt.show()
+    return genie, vaping_cloud, mask, blended
+
+
+genie_vaping_blending()
