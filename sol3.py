@@ -111,7 +111,7 @@ import os
 def relpath(filename):
     return os.path.join(os.path.dirname(__file__), filename)
 
-def genie_vaping_blending():
+def blending_example1():
     genie = read_image(relpath("externals/genie.jpg"), 2)
     vaping_cloud = read_image(relpath("externals/cloud.jpg"), 2)
     mask = np.rint(read_image(relpath("externals/genie_mask.jpg"), 1)).astype(bool)
@@ -130,7 +130,7 @@ def genie_vaping_blending():
     return genie, vaping_cloud, mask, blended
 
 
-def johnny_hair_blending():
+def blending_example2():
     johnny = read_image(relpath("externals/heresjohnny.jpg"), 2)
     hair = read_image(relpath("externals/hair.jpg"), 2)
     mask = np.rint(read_image(relpath("externals/hair_mask.jpg"), 1)).astype(bool)
@@ -148,4 +148,3 @@ def johnny_hair_blending():
     plt.show()
     return hair, johnny, mask, blended
 
-genie, vaping_cloud, mask, blended = genie_vaping_blending()
