@@ -70,7 +70,7 @@ def render_pyramid(pyr, levels):
     N, M = pyr[0].shape
     for i in np.arange(1, levels):
         normalized_level = (pyr[i]-np.amin(pyr[i]))/(np.amax(pyr[i])-np.amin(pyr[i]))
-        add_level = np.pad(normalized_level, ((0, N-pyr[i].shape[0]), (0, 0)))
+        add_level = np.pad(normalized_level, ((0, N-pyr[i].shape[0]), (0, 0)), mode='constant')
         res = np.append(res, add_level, axis=1)
     return res
 
