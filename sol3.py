@@ -148,8 +148,3 @@ def blending_example2():
     plt.show()
     return hair, johnny, mask, blended
 
-
-genie, vaping_cloud, mask, blended = blending_example1()
-
-
-genie, vaping_cloud, mask, blended = blending_example2()
