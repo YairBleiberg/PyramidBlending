@@ -91,13 +91,13 @@ def pyramid_blending(im1, im2, mask, max_levels, filter_size_im, filter_size_mas
         return np.clip(im_blend, 0, 1)
 
 
-from imageio import imread, imwrite
+import imageio
 from skimage.color import rgb2gray
 Z = 256
 
 
 def read_image(filename, representation):
-    im = imread(filename)
+    im = imageio.imread(filename)
     if representation == 2:
         return (im.astype(np.float64))/(Z-1)
     else:
