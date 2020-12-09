@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 # builds gaussian filter
 def build_filter(filter_size):
     if filter_size == 1:
-        return np.ones(1)
+        return np.ones((1,1))
     filter = np.ones(2)
     for i in np.arange(filter_size-2):
         filter = np.convolve(filter, np.ones(2))
@@ -137,6 +137,25 @@ def blending_example2():
     blended = np.zeros(hair.shape)
     for i in np.arange(3):
         blended[:,:,i] = pyramid_blending(hair[:,:, i], johnny[:,:,i], mask, 10, 3, 3)
+    plt.subplot(2,2,1)
+    plt.imshow(hair)
+    plt.subplot(2,2,2)
+    plt.imshow(johnny)
+    plt.subplot(2, 2, 3)
+    plt.imshow(mask, cmap='gray')
+    plt.subplot(2, 2, 4)
+    plt.imshow(blended)
+    plt.show()
+    return hair, johnny, mask, blended
+
+
+def test():
+    johnny = read_image(relpath("externals/im1.jpg"), 2)
+    hair = read_image(relpath("externals/im2.jpg"), 2)
+    mask = np.rint(read_image(relpath("externals/mask.jpg"), 1)).astype(bool)
+    blended = np.zeros(hair.shape)
+    for i in np.arange(3):
+        blended[:,:,i] = pyramid_blending(hair[:,:, i], johnny[:,:,i], mask, 10, 1, 3)
     plt.subplot(2,2,1)
     plt.imshow(hair)
     plt.subplot(2,2,2)
