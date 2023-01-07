@@ -1,1 +1,0 @@
-when using a pyramid with fewer layers, the blended image is less smooth, but also less blurred. the opposite holds when using a pyramid with more layers.
