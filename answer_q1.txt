@@ -1,2 +1,0 @@
-it means to let in different amount of each range of frequencies, since each layer of the laplacian pyramid is a band pass filter.
-we try to control on which of these frequencies we let in.
